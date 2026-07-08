@@ -11,6 +11,11 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
+      : "https://mr-iq.vercel.app"
+  ),
   title: {
     default: `${company.name} — ${company.tagline}`,
     template: `%s | ${company.name}`,
