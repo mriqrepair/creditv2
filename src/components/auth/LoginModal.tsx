@@ -4,6 +4,7 @@ import { useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { Mail } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 import { ActionButton } from "@/components/ui/ActionButton";
 import { Input } from "@/components/ui/Input";
 import { Modal } from "@/components/ui/Modal";
@@ -55,6 +56,8 @@ const oauthButtonClass =
 
 export function LoginModal({ open, onClose }: Props) {
   const router = useRouter();
+  const { content } = useLanguage();
+  const { ui } = content;
   const [mode, setMode] = useState<Mode>("login");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -141,7 +144,7 @@ export function LoginModal({ open, onClose }: Props) {
           return;
         }
 
-        setMessage("Check your email to confirm your account, then sign in.");
+        setMessage(ui.auth.checkEmail);
         setMode("login");
         return;
       }
@@ -167,13 +170,11 @@ export function LoginModal({ open, onClose }: Props) {
     <Modal
       open={open}
       onClose={handleClose}
-      title={mode === "login" ? "Welcome back" : "Create your profile"}
+      title={mode === "login" ? ui.auth.welcomeBack : ui.auth.createProfile}
       className="max-w-md"
     >
       <p className="-mt-2 mb-5 text-sm text-muted">
-        {mode === "login"
-          ? "Sign in to access your credit repair dashboard."
-          : "Create an account to start your credit repair journey."}
+        {mode === "login" ? ui.auth.loginSubtitle : ui.auth.signupSubtitle}
       </p>
 
       <div className="space-y-3">
@@ -184,7 +185,7 @@ export function LoginModal({ open, onClose }: Props) {
           className={oauthButtonClass}
         >
           <GoogleIcon />
-          Continue with Google
+          {ui.auth.continueGoogle}
         </button>
         <button
           type="button"
@@ -193,14 +194,14 @@ export function LoginModal({ open, onClose }: Props) {
           className={oauthButtonClass}
         >
           <AppleIcon />
-          Continue with Apple
+          {ui.auth.continueApple}
         </button>
       </div>
 
       <div className="my-5 flex items-center gap-3">
         <div className="h-px flex-1 bg-border" />
         <span className="text-xs font-medium uppercase tracking-wide text-muted">
-          or email
+          {ui.auth.orEmail}
         </span>
         <div className="h-px flex-1 bg-border" />
       </div>
@@ -208,20 +209,20 @@ export function LoginModal({ open, onClose }: Props) {
       <form onSubmit={handleEmailSubmit} className="space-y-4">
         {mode === "signup" && (
           <div className="grid gap-4 sm:grid-cols-2">
-            <Input label="First Name" name="first_name" required />
-            <Input label="Last Name" name="last_name" required />
+            <Input label={ui.auth.firstName} name="first_name" required />
+            <Input label={ui.auth.lastName} name="last_name" required />
           </div>
         )}
 
         <Input
-          label="Email"
+          label={ui.auth.email}
           name="email"
           type="email"
           autoComplete="email"
           required
         />
         <Input
-          label="Password"
+          label={ui.auth.password}
           name="password"
           type="password"
           autoComplete={mode === "login" ? "current-password" : "new-password"}
@@ -243,21 +244,21 @@ export function LoginModal({ open, onClose }: Props) {
         >
           <Mail className="h-4 w-4" />
           {loading
-            ? "Please wait..."
+            ? ui.auth.pleaseWait
             : mode === "login"
-              ? "Sign In"
-              : "Create Profile"}
+              ? ui.auth.signIn
+              : ui.auth.createProfileBtn}
         </ActionButton>
       </form>
 
       <p className="mt-5 text-center text-sm text-muted">
-        {mode === "login" ? "Don't have an account?" : "Already have an account?"}{" "}
+        {mode === "login" ? ui.auth.noAccount : ui.auth.hasAccount}{" "}
         <button
           type="button"
           onClick={toggleMode}
           className={cn("font-semibold text-orange hover:underline")}
         >
-          {mode === "login" ? "Create a profile" : "Sign in"}
+          {mode === "login" ? ui.auth.createProfileLink : ui.auth.signInLink}
         </button>
       </p>
     </Modal>

@@ -1,5 +1,5 @@
 import { Check } from "lucide-react";
-import { Button } from "@/components/ui/Button";
+import { SubscribeButton } from "@/components/checkout/SubscribeButton";
 import { cn } from "@/lib/utils";
 
 type PricingCardProps = {
@@ -9,6 +9,14 @@ type PricingCardProps = {
   features: string[];
   updateCycle: string;
   popular?: boolean;
+  labels?: {
+    mostPopular: string;
+    perMonth: string;
+    couples: string;
+    month: string;
+    whatsIncluded: string;
+    getStarted: string;
+  };
 };
 
 export function PricingCard({
@@ -18,6 +26,14 @@ export function PricingCard({
   features,
   updateCycle,
   popular,
+  labels = {
+    mostPopular: "Most Popular",
+    perMonth: "/month",
+    couples: "Couples:",
+    month: "month",
+    whatsIncluded: "What's included:",
+    getStarted: "Get Started",
+  },
 }: PricingCardProps) {
   return (
     <div
@@ -31,7 +47,7 @@ export function PricingCard({
     >
       {popular && (
         <span className="absolute -top-3 left-1/2 max-w-[calc(100%-2rem)] -translate-x-1/2 truncate rounded-full bg-orange px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white sm:px-4 sm:text-xs">
-          Most Popular
+          {labels.mostPopular}
         </span>
       )}
 
@@ -39,25 +55,28 @@ export function PricingCard({
 
       <div className="mt-3 flex items-baseline gap-1 sm:mt-4">
         <span className="text-3xl font-bold text-navy sm:text-4xl">${price}</span>
-        <span className="text-sm text-muted">/month</span>
+        <span className="text-sm text-muted">{labels.perMonth}</span>
       </div>
 
       <p className="mt-1.5 text-xs text-muted sm:mt-2 sm:text-sm">
-        Couples:{" "}
-        <span className="font-semibold text-navy">${couplesPrice}/month</span>
+        {labels.couples}{" "}
+        <span className="font-semibold text-navy">${couplesPrice}/{labels.month}</span>
       </p>
 
-      <Button
-        href="/contact"
+      <SubscribeButton
+        name={name}
+        price={price}
+        couplesPrice={couplesPrice}
+        updateCycle={updateCycle}
         variant={popular ? "primary" : "outline"}
         className="mt-5 w-full sm:mt-6"
       >
-        Get Started
-      </Button>
+        {labels.getStarted}
+      </SubscribeButton>
 
       <div className="mt-6 flex-1 sm:mt-8">
         <p className="mb-3 text-sm font-semibold text-navy sm:mb-4">
-          What&apos;s included:
+          {labels.whatsIncluded}
         </p>
         <ul className="space-y-2.5 sm:space-y-3">
           {features.map((feature) => (

@@ -3,14 +3,23 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Shield } from "lucide-react";
 import { LoginModal } from "@/components/auth/LoginModal";
-import { company, navLinks } from "@/lib/content";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 import { AuthButton } from "@/components/ui/AuthButton";
 import { Button } from "@/components/ui/Button";
+import { LanguageToggle } from "@/components/ui/LanguageToggle";
 import { cn } from "@/lib/utils";
 
+const DESKTOP_HIDDEN_NAV_HREFS = new Set(["/faq", "/guarantee"]);
+const ADMIN_HREF = "/dashboard/credit-repair";
+
 export function Header() {
+  const { content } = useLanguage();
+  const { company, navLinks, ui } = content;
+  const desktopNavLinks = navLinks.filter(
+    (link) => !DESKTOP_HIDDEN_NAV_HREFS.has(link.href)
+  );
   const [open, setOpen] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
 
@@ -28,7 +37,8 @@ export function Header() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border/60 bg-white/95 backdrop-blur-md">
+    <>
+      <header className="fixed inset-x-0 top-0 z-50 border-b border-border/60 bg-white/95 pt-[env(safe-area-inset-top,0px)] backdrop-blur-md supports-[backdrop-filter]:bg-white/90">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-2.5 sm:px-6 sm:py-3 lg:px-8">
         <Link
           href="/"
@@ -54,7 +64,7 @@ export function Header() {
         </Link>
 
         <nav className="hidden items-center gap-0.5 xl:flex">
-          {navLinks.map((link) => (
+          {desktopNavLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
@@ -66,6 +76,8 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-2">
+          <LanguageToggle compact className="hidden sm:inline-flex" />
+
           <div className="hidden items-center gap-2 sm:flex xl:gap-3">
             <AuthButton
               variant="ghost"
@@ -73,10 +85,10 @@ export function Header() {
               className="hidden sm:inline-flex"
               onClick={() => setLoginOpen(true)}
             >
-              Login
+              {ui.common.login}
             </AuthButton>
             <Button href="/onboarding" size="sm" className="hidden sm:inline-flex">
-              Get Started
+              {ui.common.getStarted}
             </Button>
           </div>
 
@@ -85,14 +97,14 @@ export function Header() {
             size="sm"
             className="inline-flex sm:hidden"
           >
-            Start
+            {ui.common.start}
           </Button>
 
           <button
             type="button"
             className="rounded-lg p-2 text-navy xl:hidden"
             onClick={() => setOpen(!open)}
-            aria-label={open ? "Close menu" : "Open menu"}
+            aria-label={open ? ui.common.closeMenu : ui.common.openMenu}
             aria-expanded={open}
           >
             {open ? <X size={22} /> : <Menu size={22} />}
@@ -104,11 +116,14 @@ export function Header() {
         className={cn(
           "border-t border-border bg-white transition-[max-height,opacity] duration-300 ease-in-out xl:hidden",
           open
-            ? "max-h-[calc(100dvh-3.5rem)] overflow-y-auto opacity-100"
+            ? "max-h-[calc(100dvh-3.5rem-env(safe-area-inset-top,0px))] overflow-y-auto opacity-100"
             : "max-h-0 overflow-hidden opacity-0"
         )}
       >
         <nav className="flex flex-col gap-0.5 px-4 py-3 pb-6">
+          <div className="mb-2 flex justify-center sm:hidden">
+            <LanguageToggle />
+          </div>
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -119,25 +134,33 @@ export function Header() {
               {link.label}
             </Link>
           ))}
-          <div className="mt-3 flex flex-col gap-2 border-t border-border pt-4">
+          <Link
+            href={ADMIN_HREF}
+            onClick={() => setOpen(false)}
+            className="mt-1 flex items-center gap-2 rounded-lg border border-border bg-surface px-3 py-3 text-sm font-semibold text-navy active:bg-border/40"
+          >
+            <Shield className="h-4 w-4 text-orange" />
+            {ui.common.admin}
+          </Link>
+          <div className="mt-3 flex flex-row gap-2 border-t border-border pt-4">
             <AuthButton
               variant="outline"
               size="sm"
-              className="w-full"
+              className="min-w-0 flex-1"
               onClick={() => {
                 setOpen(false);
                 setLoginOpen(true);
               }}
             >
-              Login
+              {ui.common.login}
             </AuthButton>
             <Button
               href="/onboarding"
               size="sm"
-              className="w-full"
+              className="min-w-0 flex-1"
               onClick={() => setOpen(false)}
             >
-              Get Started
+              {ui.common.getStarted}
             </Button>
           </div>
         </nav>
@@ -145,5 +168,10 @@ export function Header() {
 
       <LoginModal open={loginOpen} onClose={() => setLoginOpen(false)} />
     </header>
+    <div
+      aria-hidden
+      className="pointer-events-none h-[calc(3.5rem+env(safe-area-inset-top,0px))] shrink-0 sm:h-[calc(4.5rem+env(safe-area-inset-top,0px))]"
+    />
+    </>
   );
 }

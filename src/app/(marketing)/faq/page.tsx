@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { faqs } from "@/lib/content";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 import { Button } from "@/components/ui/Button";
 import { Container, Section } from "@/components/ui/Container";
 import { PageHero } from "@/components/ui/PageHero";
@@ -10,13 +10,15 @@ import { cn } from "@/lib/utils";
 import { ChevronDown } from "lucide-react";
 
 export default function FAQPage() {
+  const { content } = useLanguage();
+  const { faqs, ui } = content;
   const [open, setOpen] = useState<number | null>(0);
 
   return (
     <>
       <PageHero
-        title="Frequently Asked Questions"
-        description="Get answers to common questions about credit repair and our services."
+        title={ui.pages.faq.title}
+        description={ui.pages.faq.description}
       />
 
       <Section>
@@ -59,12 +61,12 @@ export default function FAQPage() {
       <Section className="bg-surface">
         <Container narrow className="text-center">
           <SectionHeading
-            title="Still Have Questions?"
-            description="Contact us for a free consultation where we can discuss your specific situation."
+            title={ui.pages.faq.stillHaveQuestions}
+            description={ui.pages.faq.stillHaveQuestionsDesc}
           />
           <div className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:flex-wrap sm:justify-center">
             <Button href="/contact" className="w-full sm:w-auto">
-              Free Consultation
+              {ui.pages.faq.freeConsultation}
             </Button>
             <Button
               href={`https://wa.me/13479255033`}
@@ -72,7 +74,7 @@ export default function FAQPage() {
               variant="outline"
               className="w-full sm:w-auto"
             >
-              WhatsApp Us
+              {ui.pages.faq.whatsappUs}
             </Button>
           </div>
         </Container>

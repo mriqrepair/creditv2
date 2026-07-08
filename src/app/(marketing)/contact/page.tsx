@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, FormEvent } from "react";
+import { PhoneInput } from "@/components/ui/PhoneInput";
 import { Mail, MapPin, MessageCircle, Share2 } from "lucide-react";
 import { company } from "@/lib/content";
 import { Button } from "@/components/ui/Button";
@@ -64,20 +65,11 @@ export default function ContactPage() {
                     className="mt-1.5 w-full rounded-xl border border-border px-4 py-3 text-base outline-none transition-colors focus:border-orange focus:ring-2 focus:ring-orange/20 sm:text-sm"
                   />
                 </div>
-                <div>
-                  <label
-                    htmlFor="phone"
-                    className="block text-sm font-medium text-navy"
-                  >
-                    Phone Number
-                  </label>
-                  <input
-                    type="tel"
-                    id="phone"
-                    name="phone"
-                    className="mt-1.5 w-full rounded-xl border border-border px-4 py-3 text-base outline-none transition-colors focus:border-orange focus:ring-2 focus:ring-orange/20 sm:text-sm"
-                  />
-                </div>
+                <PhoneInput
+                  label="Phone Number"
+                  id="phone"
+                  name="phone"
+                />
                 <div>
                   <label
                     htmlFor="message"

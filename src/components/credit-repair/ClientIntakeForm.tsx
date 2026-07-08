@@ -2,7 +2,10 @@
 
 import { useState, FormEvent } from "react";
 import { Card } from "@/components/ui/Card";
-import { Input, Textarea } from "@/components/ui/Input";
+import { Input, Select, Textarea } from "@/components/ui/Input";
+import { DatePicker } from "@/components/ui/DatePicker";
+import { PhoneInput } from "@/components/ui/PhoneInput";
+import { US_STATE_OPTIONS } from "@/lib/us-states";
 import { ActionButton } from "@/components/ui/ActionButton";
 import { apiPost } from "@/lib/credit-repair/client-api";
 import type { Client } from "@/lib/credit-repair/types";
@@ -40,12 +43,16 @@ export function ClientIntakeForm({ onCreated }: Props) {
         <Input label="First Name *" name="first_name" required />
         <Input label="Last Name *" name="last_name" required />
         <Input label="Email *" name="email" type="email" required className="sm:col-span-2" />
-        <Input label="Phone" name="phone" type="tel" />
+        <PhoneInput label="Phone" name="phone" />
         <Input label="SSN Last 4" name="ssn_last4" maxLength={4} />
-        <Input label="Date of Birth" name="date_of_birth" type="date" />
+        <DatePicker
+          label="Date of Birth"
+          name="date_of_birth"
+          placeholder="Select date of birth"
+        />
         <Input label="Address Line 1" name="address_line1" className="sm:col-span-2" />
         <Input label="City" name="city" />
-        <Input label="State" name="state" />
+        <Select label="State" name="state" options={US_STATE_OPTIONS} />
         <Input label="ZIP" name="zip" />
         <Textarea label="Notes" name="notes" rows={3} className="sm:col-span-2" />
         <div className="sm:col-span-2">

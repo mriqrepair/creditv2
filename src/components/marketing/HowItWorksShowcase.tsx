@@ -11,7 +11,8 @@ import {
   Shield,
   TrendingUp,
 } from "lucide-react";
-import { howItWorksSteps, company } from "@/lib/content";
+import { BureauLogo } from "@/components/marketing/BureauLogo";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 
@@ -55,9 +56,9 @@ const stepMeta = [
 ];
 
 const bureaus = [
-  { name: "Equifax", abbr: "EQ", color: "#E31837" },
-  { name: "Experian", abbr: "EX", color: "#1D4F91" },
-  { name: "TransUnion", abbr: "TU", color: "#00A3E0" },
+  { id: "equifax" as const, name: "Equifax" },
+  { id: "experian" as const, name: "Experian" },
+  { id: "transunion" as const, name: "TransUnion" },
 ];
 
 const cyclePhases = [
@@ -68,6 +69,8 @@ const cyclePhases = [
 ];
 
 export function HowItWorksShowcase() {
+  const { content } = useLanguage();
+  const { howItWorksSteps, company } = content;
   const [activeStep, setActiveStep] = useState(0);
 
   return (
@@ -152,22 +155,54 @@ export function HowItWorksShowcase() {
               traditional credit repair services.
             </p>
           </div>
-          <div className="flex items-center gap-2 rounded-full bg-green-50 px-4 py-2">
-            <BarChart3 className="h-4 w-4 text-green-600" />
+          <div className="flex items-center gap-2 rounded-xl bg-green-50 px-3 py-2.5 sm:rounded-full sm:px-4 sm:py-2">
+            <BarChart3 className="h-4 w-4 shrink-0 text-green-600" />
             <span className="text-sm font-semibold text-green-700">
               {company.successRate} success rate
             </span>
           </div>
         </div>
 
-        <div className="relative mt-8">
-          <div className="absolute left-0 right-0 top-5 hidden h-0.5 bg-border sm:block" />
-          <div className="grid gap-4 sm:grid-cols-4 sm:gap-3">
-            {cyclePhases.map((phase, i) => (
-              <div key={phase.day} className="relative text-center sm:text-left">
+        {/* Mobile: vertical timeline */}
+        <div className="mt-6 sm:hidden">
+          {cyclePhases.map((phase, i) => (
+            <div key={phase.day} className="flex gap-3">
+              <div className="flex flex-col items-center">
                 <div
                   className={cn(
-                    "relative z-10 mx-auto flex h-10 w-10 items-center justify-center rounded-full text-xs font-bold sm:mx-0",
+                    "flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xs font-bold",
+                    i === 0
+                      ? "bg-orange text-white shadow-md shadow-orange/30"
+                      : "border-2 border-border bg-white text-navy"
+                  )}
+                >
+                  {i + 1}
+                </div>
+                {i < cyclePhases.length - 1 && (
+                  <div className="my-1 w-0.5 flex-1 bg-border" />
+                )}
+              </div>
+              <div className={cn("min-w-0 pb-5", i === cyclePhases.length - 1 && "pb-0")}>
+                <p className="text-[11px] font-bold uppercase tracking-wide text-orange">
+                  {phase.day}
+                </p>
+                <p className="mt-0.5 text-sm font-medium leading-snug text-navy">
+                  {phase.label}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Desktop: horizontal timeline */}
+        <div className="relative mt-8 hidden sm:block">
+          <div className="absolute left-0 right-0 top-5 h-0.5 bg-border" />
+          <div className="grid grid-cols-4 gap-3">
+            {cyclePhases.map((phase, i) => (
+              <div key={phase.day} className="relative text-left">
+                <div
+                  className={cn(
+                    "relative z-10 flex h-10 w-10 items-center justify-center rounded-full text-xs font-bold",
                     i === 0
                       ? "bg-orange text-white shadow-lg shadow-orange/30"
                       : "border-2 border-border bg-white text-navy"
@@ -198,18 +233,7 @@ export function HowItWorksShowcase() {
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             {bureaus.map((bureau) => (
-              <div
-                key={bureau.name}
-                className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 backdrop-blur-sm"
-              >
-                <span
-                  className="flex h-8 w-8 items-center justify-center rounded-lg text-xs font-bold text-white"
-                  style={{ backgroundColor: bureau.color }}
-                >
-                  {bureau.abbr}
-                </span>
-                <span className="text-sm font-semibold">{bureau.name}</span>
-              </div>
+              <BureauLogo key={bureau.name} bureau={bureau.id} />
             ))}
           </div>
         </div>

@@ -34,11 +34,12 @@ export default function DashboardLayout({
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="border-b border-border bg-white px-4 py-3 lg:hidden">
+        <header className="fixed inset-x-0 top-0 z-40 border-b border-border bg-white px-4 py-3 pt-[calc(0.75rem+env(safe-area-inset-top,0px))] lg:hidden">
           <Link href="/dashboard/credit-repair" className="text-sm font-bold text-navy">
             MR.<span className="text-orange">IQ</span> Dashboard
           </Link>
         </header>
+        <div aria-hidden className="h-[calc(3.25rem+env(safe-area-inset-top,0px))] shrink-0 lg:hidden" />
         <main className="flex-1 p-4 sm:p-6 lg:p-8">{children}</main>
       </div>
     </div>

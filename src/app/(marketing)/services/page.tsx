@@ -3,25 +3,34 @@ import { CheckList } from "@/components/ui/Section";
 import { Button } from "@/components/ui/Button";
 import { Container, Section } from "@/components/ui/Container";
 import { PageHero } from "@/components/ui/PageHero";
-import { services } from "@/lib/content";
+import { ServicesShowcaseMobile } from "@/components/marketing/ServicesShowcaseMobile";
+import { getContent } from "@/lib/i18n";
+import { getLocale } from "@/lib/i18n/server";
 
-export const metadata: Metadata = {
-  title: "Services",
-  description:
-    "Comprehensive credit repair solutions — disputes, consultations, identity protection, business credit, and more.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const content = getContent(await getLocale());
+  return {
+    title: content.ui.pages.services.title,
+    description: content.ui.pages.services.description,
+  };
+}
 
-export default function ServicesPage() {
+export default async function ServicesPage() {
+  const content = getContent(await getLocale());
+  const { services, ui } = content;
+
   return (
     <>
       <PageHero
-        title="Our Services"
-        description="Comprehensive credit repair solutions tailored to your unique situation. Everything included in your membership."
+        title={ui.pages.services.title}
+        description={ui.pages.services.description}
       />
 
       <Section>
         <Container>
-          <div className="grid gap-5 sm:gap-6 md:grid-cols-2">
+          <ServicesShowcaseMobile />
+
+          <div className="hidden gap-5 sm:gap-6 md:grid md:grid-cols-2">
             {services.map((service) => (
               <div
                 key={service.title}
@@ -40,14 +49,12 @@ export default function ServicesPage() {
             ))}
           </div>
 
-          <div className="mt-10 rounded-2xl bg-surface p-5 text-center sm:mt-16 sm:p-8">
-            <h3 className="text-xl font-bold text-navy sm:text-2xl">
-              Credit Monitoring with IdentityIQ
+          <div className="mt-8 rounded-2xl bg-surface p-5 text-left sm:mt-16 sm:p-8 sm:text-center">
+            <h3 className="text-lg font-bold text-navy sm:text-2xl">
+              {ui.services.identityIqTitle}
             </h3>
-            <p className="mx-auto mt-3 max-w-2xl text-sm text-muted sm:mt-4 sm:text-base">
-              We recommend IdentityIQ for ongoing credit monitoring and identity
-              protection — real-time monitoring from all three bureaus, identity
-              theft protection, credit score tracking, and dark web monitoring.
+            <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-muted sm:mt-4 sm:text-base">
+              {ui.services.identityIqDescription}
             </p>
             <Button
               href="https://www.identityiq.com"
@@ -55,13 +62,13 @@ export default function ServicesPage() {
               variant="outline"
               className="mt-5 w-full sm:mt-6 sm:w-auto"
             >
-              Learn More About IdentityIQ
+              {ui.services.identityIqButton}
             </Button>
           </div>
 
-          <div className="mt-10 text-center sm:mt-12">
-            <Button href="/pricing" size="lg">
-              View Pricing Plans
+          <div className="mt-8 text-center sm:mt-12">
+            <Button href="/pricing" size="lg" className="w-full sm:w-auto">
+              {ui.services.viewPricing}
             </Button>
           </div>
         </Container>

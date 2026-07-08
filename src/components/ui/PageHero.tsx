@@ -23,8 +23,8 @@ export function PageHero({
       <Container>
         <div
           className={cn(
-            centered ? "mx-auto max-w-3xl text-center" : "max-w-4xl",
-            children != null && "grid items-center gap-8 lg:grid-cols-2 lg:gap-12"
+            centered ? "mx-auto max-w-3xl text-center" : "max-w-4xl lg:max-w-none",
+            children != null && "grid items-center gap-8 lg:grid-cols-2 lg:gap-12 xl:gap-16"
           )}
         >
           <div

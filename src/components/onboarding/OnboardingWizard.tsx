@@ -18,7 +18,10 @@ import { IdentityIQCreditStep } from "./IdentityIQCreditStep";
 import { ActionButton } from "@/components/ui/ActionButton";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
-import { Input } from "@/components/ui/Input";
+import { Input, Select } from "@/components/ui/Input";
+import { DatePicker } from "@/components/ui/DatePicker";
+import { PhoneInput } from "@/components/ui/PhoneInput";
+import { US_STATE_OPTIONS } from "@/lib/us-states";
 import { Container, Section } from "@/components/ui/Container";
 import { PageHero } from "@/components/ui/PageHero";
 import { cn } from "@/lib/utils";
@@ -31,7 +34,7 @@ const steps = [
   { id: 5, label: "Complete", icon: CheckCircle2 },
 ];
 
-export function OnboardingWizard() {
+export function OnboardingWizard({ embedded = false }: { embedded?: boolean }) {
   const [step, setStep] = useState(1);
   const [client, setClient] = useState<Client | null>(null);
   const [creditSummary, setCreditSummary] = useState<IdentityIQCreditSummary | null>(
@@ -86,13 +89,30 @@ export function OnboardingWizard() {
 
   return (
     <>
-      <PageHero
-        eyebrow="Get Started"
-        title="Start Your Credit Repair Journey"
-        description={`Join ${company.name} in minutes. Create your profile, connect IdentityIQ for 3-bureau scores, and access your dashboard.`}
-      />
+      {!embedded && (
+        <PageHero
+          eyebrow="Get Started"
+          title="Start Your Credit Repair Journey"
+          description={`Join ${company.name} in minutes. Create your profile, connect IdentityIQ for 3-bureau scores, and access your dashboard.`}
+        />
+      )}
 
-      <Section className="bg-surface">
+      {embedded && (
+        <div className="mb-6 text-center">
+          <p className="text-xs font-semibold uppercase tracking-wider text-orange">
+            Get Started
+          </p>
+          <h2 className="mt-1 text-xl font-bold text-navy sm:text-2xl">
+            Start Your Credit Repair Journey
+          </h2>
+          <p className="mt-2 text-sm text-muted">
+            Join {company.name} in minutes. Create your profile and access your
+            dashboard.
+          </p>
+        </div>
+      )}
+
+      <Section className={embedded ? "py-0" : "bg-surface"}>
         <Container narrow>
           <ol className="mb-8 flex items-center justify-between gap-1 sm:gap-2">
             {steps.map((item) => {
@@ -159,12 +179,16 @@ export function OnboardingWizard() {
                 <Input label="First Name *" name="first_name" required />
                 <Input label="Last Name *" name="last_name" required />
                 <Input label="Email *" name="email" type="email" required className="sm:col-span-2" />
-                <Input label="Phone" name="phone" type="tel" />
+                <PhoneInput label="Phone" name="phone" />
                 <Input label="SSN Last 4" name="ssn_last4" maxLength={4} />
-                <Input label="Date of Birth" name="date_of_birth" type="date" />
+                <DatePicker
+                  label="Date of Birth"
+                  name="date_of_birth"
+                  placeholder="Select date of birth"
+                />
                 <Input label="Address Line 1" name="address_line1" className="sm:col-span-2" />
                 <Input label="City" name="city" />
-                <Input label="State" name="state" />
+                <Select label="State" name="state" options={US_STATE_OPTIONS} />
                 <Input label="ZIP" name="zip" />
                 <div className="flex flex-wrap gap-3 sm:col-span-2">
                   <ActionButton type="button" variant="outline" onClick={() => setStep(1)}>

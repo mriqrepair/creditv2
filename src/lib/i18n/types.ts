@@ -1,0 +1,218 @@
+export type Locale = "en" | "es";
+
+export type NavLink = { label: string; href: string };
+
+export type PricingPlan = {
+  name: string;
+  price: number;
+  couplesPrice: number;
+  popular: boolean;
+  updateCycle: string;
+  features: string[];
+};
+
+export type Service = {
+  title: string;
+  description: string;
+  features: string[];
+};
+
+export type SiteContent = {
+  company: {
+    name: string;
+    tagline: string;
+    founder: string;
+    email: string;
+    whatsapp: string;
+    whatsappDisplay: string;
+    instagram: string;
+    serviceArea: string;
+    yearsExperience: string;
+    successRate: string;
+  };
+  navLinks: NavLink[];
+  pricingPlans: PricingPlan[];
+  services: Service[];
+  differentiators: { title: string; description: string }[];
+  memberBenefits: { title: string; detail: string }[];
+  testimonials: { quote: string; author: string; source: string }[];
+  faqs: { question: string; answer: string }[];
+  howItWorksSteps: { step: number; title: string; description: string }[];
+  educationArticles: { title: string; description: string }[];
+  ui: {
+    common: {
+      login: string;
+      getStarted: string;
+      start: string;
+      howItWorks: string;
+      aboutUs: string;
+      joinToday: string;
+      startNow: string;
+      from: string;
+      perMonth: string;
+      couples: string;
+      month: string;
+      openMenu: string;
+      closeMenu: string;
+      language: string;
+      admin: string;
+    };
+    footer: {
+      description: string;
+      theProgram: string;
+      learn: string;
+      getStarted: string;
+      faq: string;
+      aboutUs: string;
+      contact: string;
+      instagram: string;
+      privacyPolicy: string;
+      termsOfService: string;
+      rightsReserved: string;
+    };
+    auth: {
+      welcomeBack: string;
+      createProfile: string;
+      loginSubtitle: string;
+      signupSubtitle: string;
+      continueGoogle: string;
+      continueApple: string;
+      orEmail: string;
+      firstName: string;
+      lastName: string;
+      email: string;
+      password: string;
+      pleaseWait: string;
+      signIn: string;
+      createProfileBtn: string;
+      noAccount: string;
+      hasAccount: string;
+      createProfileLink: string;
+      signInLink: string;
+      checkEmail: string;
+    };
+    pricing: {
+      mostPopular: string;
+      whatsIncluded: string;
+      couplesLabel: string;
+      showMore: string;
+      showLess: string;
+      trialNote: string;
+    };
+    checkout: {
+      back: string;
+      perMonth: string;
+      billedMonthly: string;
+      subscription: string;
+      trial: string;
+      trialFree: string;
+      dueToday: string;
+      trialChargeNote: string;
+      secureNote: string;
+      payWithCard: string;
+      simulatorBadge: string;
+      email: string;
+      couplesPlan: string;
+      cardInfo: string;
+      nameOnCard: string;
+      subscribe: string;
+      processing: string;
+      termsNote: string;
+      poweredBy: string;
+      simulatorNote: string;
+      successTitle: string;
+      successDescription: string;
+      continueOnboarding: string;
+      close: string;
+    };
+    services: {
+      included: string;
+      whatYouGet: string;
+      tabLabels: string[];
+      identityIqTitle: string;
+      identityIqDescription: string;
+      identityIqButton: string;
+      viewPricing: string;
+    };
+    stats: {
+      yearsExperience: string;
+      successRate: string;
+      bureauCoverage: string;
+      disputeCycle: string;
+      yearsDetail: string;
+      successDetail: string;
+      bureauDetail: string;
+      disputeDetail: string;
+      bureaus: string;
+      days: string;
+    };
+    memberBenefits: {
+      panelTitle: string;
+      panelSubtitle: string;
+      seeAllServices: string;
+    };
+    home: {
+      heroTitle: string;
+      heroTitleAccent: string;
+      heroDescription: string;
+      differenceEyebrow: string;
+      differenceTitle: string;
+      differenceDescription: string;
+      ctaTitle: string;
+      ctaDescription: string;
+      pricingEyebrow: string;
+      pricingTitle: string;
+      pricingDescription: string;
+      benefitsEyebrow: string;
+      benefitsTitle: string;
+      aboutEyebrow: string;
+      aboutTitle: string;
+      aboutDescription: string;
+      membershipTitle: string;
+      membershipDescription: string;
+      educationEyebrow: string;
+      educationTitle: string;
+      guaranteeTitle: string;
+      guaranteeDescription: string;
+      getStartedNow: string;
+    };
+    pages: {
+      services: { title: string; description: string };
+      pricing: { title: string; description: string };
+      faq: {
+        title: string;
+        description: string;
+        stillHaveQuestions: string;
+        stillHaveQuestionsDesc: string;
+        freeConsultation: string;
+        whatsappUs: string;
+      };
+      howItWorks: { title: string; description: string };
+      guarantee: { title: string; description: string };
+      contact: { title: string; description: string };
+      about: {
+        title: string;
+        description: string;
+        heroEyebrow: string;
+        heroTitle: string;
+        heroDescription: string;
+        statsTitle: string;
+        founderTitle: string;
+        founderRole: string;
+        founderBio1: string;
+        founderBio2: string;
+        founderQuote: string;
+        missionTitle: string;
+        missionText: string;
+        visionTitle: string;
+        visionText: string;
+        valuesTitle: string;
+        values: { title: string; description: string }[];
+        ctaTitle: string;
+        ctaDescription: string;
+        freeConsultation: string;
+        getStarted: string;
+      };
+    };
+  };
+};

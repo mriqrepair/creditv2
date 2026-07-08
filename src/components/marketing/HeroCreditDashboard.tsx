@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { ArrowUpRight, ShieldCheck, TrendingUp } from "lucide-react";
+import { BureauLogo } from "@/components/marketing/BureauLogo";
 import { cn } from "@/lib/utils";
 
 type BureauId = "equifax" | "experian" | "transunion";
@@ -66,18 +67,25 @@ function ScoreGauge({
   target,
   color,
   active,
+  compact = false,
 }: {
   score: number;
   target: number;
   color: string;
   active: boolean;
+  compact?: boolean;
 }) {
   const pct = Math.min(100, Math.max(0, ((score - 300) / (850 - 300)) * 100));
   const circumference = 2 * Math.PI * 42;
   const offset = circumference - (pct / 100) * circumference * 0.75;
 
   return (
-    <div className="relative mx-auto h-28 w-28 sm:h-32 sm:w-32">
+    <div
+      className={cn(
+        "relative shrink-0",
+        compact ? "h-20 w-20" : "mx-auto h-28 w-28 sm:h-32 sm:w-32"
+      )}
+    >
       <svg viewBox="0 0 100 100" className="h-full w-full -rotate-[135deg]">
         <circle
           cx="50"
@@ -106,25 +114,122 @@ function ScoreGauge({
       <div className="absolute inset-0 flex flex-col items-center justify-center">
         <span
           className={cn(
-            "text-2xl font-bold tabular-nums text-navy transition-all duration-700 sm:text-3xl",
+            "font-bold tabular-nums text-navy transition-all duration-700",
+            compact ? "text-xl" : "text-2xl sm:text-3xl",
             active && "scale-105"
           )}
         >
           {Math.round(score)}
         </span>
-        <span className="text-[10px] font-medium uppercase tracking-wide text-muted sm:text-xs">
+        <span className="text-[9px] font-medium uppercase tracking-wide text-muted sm:text-xs">
           {scoreLabel(score)}
         </span>
       </div>
       {active && (
-        <span className="absolute -right-1 -top-1 flex h-6 w-6 items-center justify-center rounded-full bg-green-500 text-white shadow-lg animate-bounce">
-          <ArrowUpRight className="h-3.5 w-3.5" />
+        <span
+          className={cn(
+            "absolute flex items-center justify-center rounded-full bg-green-500 text-white shadow-lg animate-bounce",
+            compact ? "-right-0.5 -top-0.5 h-5 w-5" : "-right-1 -top-1 h-6 w-6"
+          )}
+        >
+          <ArrowUpRight className={compact ? "h-3 w-3" : "h-3.5 w-3.5"} />
         </span>
       )}
       <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 whitespace-nowrap text-[10px] font-semibold text-green-600">
         → {target}
       </span>
     </div>
+  );
+}
+
+function BureauCard({
+  bureau,
+  score,
+  isActive,
+  onSelect,
+  compact = false,
+}: {
+  bureau: Bureau;
+  score: number;
+  isActive: boolean;
+  onSelect: () => void;
+  compact?: boolean;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onSelect}
+      className={cn(
+        "rounded-xl border text-left transition-all duration-500",
+        compact ? "w-full p-3" : "p-3 sm:p-4",
+        isActive
+          ? "border-orange/40 bg-orange/5 shadow-md ring-2 ring-orange/20"
+          : "border-border/60 bg-white hover:border-border hover:shadow-sm"
+      )}
+    >
+      <div className={cn("flex items-center", compact ? "mb-2" : "mb-3")}>
+        <BureauLogo bureau={bureau.id} compact bare />
+      </div>
+
+      {compact ? (
+        <div className="flex w-full items-center justify-between gap-4">
+          <ScoreGauge
+            score={score}
+            target={bureau.targetScore}
+            color={bureau.color}
+            active={isActive}
+            compact
+          />
+          <div className="min-w-0 flex-1 space-y-2">
+            <div className="flex justify-between text-[10px] text-muted">
+              <span>Disputes</span>
+              <span className="font-semibold text-navy">{bureau.disputes}</span>
+            </div>
+            <div className="h-1.5 overflow-hidden rounded-full bg-slate-100">
+              <div
+                className={cn(
+                  "h-full rounded-full transition-all duration-1000",
+                  bureau.accent,
+                  isActive ? "w-full" : "w-2/3"
+                )}
+              />
+            </div>
+            <div className="flex justify-between text-[10px] text-muted">
+              <span>Removed</span>
+              <span className="font-semibold text-green-600">{bureau.removed}</span>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <>
+          <ScoreGauge
+            score={score}
+            target={bureau.targetScore}
+            color={bureau.color}
+            active={isActive}
+          />
+          <div className="mt-3 space-y-1.5">
+            <div className="flex justify-between text-[10px] text-muted sm:text-xs">
+              <span>Disputes active</span>
+              <span className="font-semibold text-navy">{bureau.disputes}</span>
+            </div>
+            <div className="h-1.5 overflow-hidden rounded-full bg-slate-100">
+              <div
+                className={cn(
+                  "h-full rounded-full transition-all duration-1000",
+                  bureau.accent,
+                  isActive ? "w-full" : "w-2/3"
+                )}
+              />
+            </div>
+            <div className="flex justify-between text-[10px] text-muted sm:text-xs">
+              <span>Items removed</span>
+              <span className="font-semibold text-green-600">{bureau.removed}</span>
+            </div>
+          </div>
+        </>
+      )}
+    </button>
   );
 }
 
@@ -135,6 +240,7 @@ export function HeroCreditDashboard() {
 
   const active = bureaus[activeIndex];
   const avgScore = Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
+  const scoreGain = avgScore - Math.round(bureaus.reduce((a, b) => a + b.startScore, 0) / 3);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -165,100 +271,88 @@ export function HeroCreditDashboard() {
   }, []);
 
   return (
-    <div className="relative w-full max-w-lg lg:max-w-none">
-      <div className="absolute -inset-4 rounded-3xl bg-orange/20 blur-3xl sm:-inset-6" />
+    <div className="relative mx-auto w-full max-w-lg lg:max-w-none">
+      <div className="absolute -inset-3 rounded-3xl bg-orange/20 blur-3xl sm:-inset-6" />
 
-      <div className="relative overflow-hidden rounded-2xl border border-white/20 bg-white/95 p-4 shadow-2xl backdrop-blur-sm sm:rounded-3xl sm:p-5 lg:p-6">
-        <div className="mb-4 flex items-center justify-between gap-3 border-b border-border/60 pb-4">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-muted">
+      <div className="relative overflow-hidden rounded-2xl border border-white/20 bg-white/95 p-3 shadow-2xl backdrop-blur-sm sm:rounded-3xl sm:p-5 lg:p-6">
+        <div className="flex items-center justify-between gap-3 border-b border-border/60 pb-3 sm:mb-4 sm:pb-4">
+          <div className="min-w-0">
+            <p className="text-[10px] font-semibold uppercase tracking-wider text-muted sm:text-xs">
               Credit Repair Dashboard
             </p>
-            <p className="mt-0.5 text-lg font-bold text-navy sm:text-xl">
+            <p className="mt-0.5 text-base font-bold text-navy sm:text-xl">
               3-Bureau Overview
             </p>
           </div>
-          <div className="flex items-center gap-2 rounded-full bg-green-50 px-3 py-1.5">
-            <TrendingUp className="h-4 w-4 text-green-600" />
-            <span className="text-sm font-bold tabular-nums text-green-700">
-              +{avgScore - Math.round(bureaus.reduce((a, b) => a + b.startScore, 0) / 3)}
+          <div className="flex shrink-0 items-center gap-1.5 rounded-full bg-green-50 px-2.5 py-1 sm:gap-2 sm:px-3 sm:py-1.5">
+            <TrendingUp className="h-3.5 w-3.5 text-green-600 sm:h-4 sm:w-4" />
+            <span className="text-xs font-bold tabular-nums text-green-700 sm:text-sm">
+              +{scoreGain}
             </span>
           </div>
         </div>
 
-        <div className="grid gap-3 sm:grid-cols-3 sm:gap-4">
-          {bureaus.map((bureau, i) => {
-            const isActive = i === activeIndex;
-            return (
+        {/* Mobile: bureau tabs + single card */}
+        <div className="mt-3 w-full sm:hidden">
+          <div className="mb-3 flex gap-2">
+            {bureaus.map((bureau, i) => (
               <button
                 key={bureau.id}
                 type="button"
                 onClick={() => setActiveIndex(i)}
                 className={cn(
-                  "rounded-xl border p-3 text-left transition-all duration-500 sm:p-4",
-                  isActive
-                    ? "border-orange/40 bg-orange/5 shadow-md ring-2 ring-orange/20"
-                    : "border-border/60 bg-white hover:border-border hover:shadow-sm"
+                  "flex h-9 min-h-9 max-h-9 flex-1 items-center justify-center overflow-hidden rounded-lg border px-2 py-1 transition-all",
+                  i === activeIndex
+                    ? "border-orange/40 bg-orange/10"
+                    : "border-border/60 bg-white"
                 )}
               >
-                <div className="mb-2 flex items-center gap-2">
-                  <span
-                    className="flex h-7 w-7 items-center justify-center rounded-lg text-[10px] font-bold text-white sm:h-8 sm:w-8 sm:text-xs"
-                    style={{ backgroundColor: bureau.color }}
-                  >
-                    {bureau.short}
-                  </span>
-                  <span className="text-xs font-semibold text-navy sm:text-sm">
-                    {bureau.name}
-                  </span>
-                </div>
-                <ScoreGauge
-                  score={scores[i]}
-                  target={bureau.targetScore}
-                  color={bureau.color}
-                  active={isActive}
-                />
-                <div className="mt-3 space-y-1.5">
-                  <div className="flex justify-between text-[10px] text-muted sm:text-xs">
-                    <span>Disputes active</span>
-                    <span className="font-semibold text-navy">{bureau.disputes}</span>
-                  </div>
-                  <div className="h-1.5 overflow-hidden rounded-full bg-slate-100">
-                    <div
-                      className={cn(
-                        "h-full rounded-full transition-all duration-1000",
-                        bureau.accent,
-                        isActive ? "w-full" : "w-2/3"
-                      )}
-                    />
-                  </div>
-                  <div className="flex justify-between text-[10px] text-muted sm:text-xs">
-                    <span>Items removed</span>
-                    <span className="font-semibold text-green-600">{bureau.removed}</span>
-                  </div>
-                </div>
+                <BureauLogo bureau={bureau.id} size="tab" bare className="px-0.5" />
               </button>
-            );
-          })}
+            ))}
+          </div>
+
+          <BureauCard
+            bureau={active}
+            score={scores[activeIndex]}
+            isActive
+            onSelect={() => setActiveIndex(activeIndex)}
+            compact
+          />
         </div>
 
-        <div className="mt-4 rounded-xl border border-border/60 bg-surface p-3 sm:mt-5 sm:p-4">
+        {/* Desktop: all three cards */}
+        <div className="mt-4 hidden gap-4 sm:grid sm:grid-cols-3">
+          {bureaus.map((bureau, i) => (
+            <BureauCard
+              key={bureau.id}
+              bureau={bureau}
+              score={scores[i]}
+              isActive={i === activeIndex}
+              onSelect={() => setActiveIndex(i)}
+            />
+          ))}
+        </div>
+
+        <div className="mt-3 rounded-xl border border-border/60 bg-surface p-3 sm:mt-5 sm:p-4">
           <div className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-2">
-              <ShieldCheck className="h-4 w-4 text-orange" />
-              <span className="text-xs font-semibold text-navy sm:text-sm">
+            <div className="flex min-w-0 items-center gap-2">
+              <ShieldCheck className="h-3.5 w-3.5 shrink-0 text-orange sm:h-4 sm:w-4" />
+              <span className="truncate text-[11px] font-semibold text-navy sm:text-sm">
                 Repair progress — {active.name}
               </span>
             </div>
-            <span className="text-sm font-bold tabular-nums text-orange">{progress}%</span>
+            <span className="shrink-0 text-xs font-bold tabular-nums text-orange sm:text-sm">
+              {progress}%
+            </span>
           </div>
-          <div className="mt-2 h-2 overflow-hidden rounded-full bg-white">
+          <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white sm:h-2">
             <div
               className="h-full rounded-full bg-gradient-to-r from-orange to-orange-light transition-all duration-700 ease-out"
               style={{ width: `${progress}%` }}
             />
           </div>
-          <div className="mt-3 grid grid-cols-3 gap-2 text-center">
+          <div className="mt-2.5 grid grid-cols-3 gap-1.5 text-center sm:mt-3 sm:gap-2">
             {[
               { label: "Negative items", value: "7 → 2" },
               { label: "Avg. score", value: String(avgScore) },
@@ -266,19 +360,22 @@ export function HeroCreditDashboard() {
             ].map((stat) => (
               <div
                 key={stat.label}
-                className="rounded-lg bg-white px-2 py-2 sm:px-3"
+                className="rounded-lg bg-white px-1.5 py-1.5 sm:px-3 sm:py-2"
               >
-                <p className="text-[10px] text-muted sm:text-xs">{stat.label}</p>
-                <p className="text-sm font-bold text-navy sm:text-base">{stat.value}</p>
+                <p className="text-[9px] text-muted sm:text-xs">{stat.label}</p>
+                <p className="text-xs font-bold text-navy sm:text-base">{stat.value}</p>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="mt-3 flex items-center justify-center gap-2">
+        <div className="mt-2.5 flex items-center justify-center gap-2 sm:mt-3">
           {bureaus.map((bureau, i) => (
-            <span
+            <button
               key={bureau.id}
+              type="button"
+              onClick={() => setActiveIndex(i)}
+              aria-label={`Show ${bureau.name}`}
               className={cn(
                 "h-1.5 rounded-full transition-all duration-500",
                 i === activeIndex ? "w-6 bg-orange" : "w-1.5 bg-border"
