@@ -51,7 +51,10 @@ export function OnboardingModal({ open, onClose }: OnboardingModalProps) {
         </button>
       </header>
 
-      <div className="min-h-0 flex-1 overflow-y-auto px-4 py-6 sm:px-6 sm:py-8">
+      <div
+        data-onboarding-scroll
+        className="min-h-0 flex-1 overflow-y-auto px-4 py-6 sm:px-6 sm:py-8"
+      >
         <div className="mx-auto max-w-2xl">
           <OnboardingWizard embedded />
         </div>

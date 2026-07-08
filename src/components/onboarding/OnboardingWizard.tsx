@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, FormEvent } from "react";
+import { useEffect, useRef, useState, FormEvent } from "react";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -43,6 +43,24 @@ export function OnboardingWizard({ embedded = false }: { embedded?: boolean }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [signatureName, setSignatureName] = useState("");
+  const stepTopRef = useRef<HTMLDivElement>(null);
+  const isFirstStepRender = useRef(true);
+
+  useEffect(() => {
+    if (isFirstStepRender.current) {
+      isFirstStepRender.current = false;
+      return;
+    }
+
+    if (embedded) {
+      document
+        .querySelector<HTMLElement>("[data-onboarding-scroll]")
+        ?.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
+    stepTopRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [step, embedded]);
 
   async function handleProfileSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -114,6 +132,14 @@ export function OnboardingWizard({ embedded = false }: { embedded?: boolean }) {
 
       <Section className={embedded ? "py-0" : "bg-surface"}>
         <Container narrow>
+          <div
+            ref={stepTopRef}
+            className={
+              embedded
+                ? undefined
+                : "scroll-mt-[calc(4.5rem+env(safe-area-inset-top,0px))]"
+            }
+          />
           <ol className="mb-8 flex items-center justify-between gap-1 sm:gap-2">
             {steps.map((item) => {
               const Icon = item.icon;
