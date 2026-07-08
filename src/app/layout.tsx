@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.VERCEL_URL
       ? `https://${process.env.VERCEL_URL}`
-      : "https://mr-iq.vercel.app"
+      : process.env.NEXT_PUBLIC_SITE_URL ?? "https://creditv2-eight.vercel.app"
   ),
   title: {
     default: `${company.name} — ${company.tagline}`,
