@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { CreditRepairDashboard } from "@/components/credit-repair/CreditRepairDashboard";
 
 export const metadata: Metadata = {
@@ -7,5 +8,9 @@ export const metadata: Metadata = {
 };
 
 export default function CreditRepairPage() {
-  return <CreditRepairDashboard />;
+  return (
+    <Suspense fallback={<p className="text-sm text-muted">Loading dashboard...</p>}>
+      <CreditRepairDashboard />
+    </Suspense>
+  );
 }

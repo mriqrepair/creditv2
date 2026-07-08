@@ -1,4 +1,3 @@
-import Image from "next/image";
 import {
   ArrowRight,
   Gauge,
@@ -7,10 +6,11 @@ import {
   Users,
   Zap,
 } from "lucide-react";
+import { HeroCreditDashboard } from "@/components/marketing/HeroCreditDashboard";
 import { Button } from "@/components/ui/Button";
 import { Container, Section } from "@/components/ui/Container";
 import { PricingCard } from "@/components/PricingCard";
-import { SectionHeading, TrustBadges } from "@/components/ui/Section";
+import { SectionHeading } from "@/components/ui/Section";
 import {
   company,
   differentiators,
@@ -50,7 +50,7 @@ export default function HomePage() {
                 <span className="text-sm text-white/60">/ month</span>
               </div>
               <div className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:flex-wrap">
-                <Button href="/contact" size="lg">
+                <Button href="/onboarding" size="lg">
                   Get Started
                   <ArrowRight className="h-5 w-5" />
                 </Button>
@@ -58,26 +58,15 @@ export default function HomePage() {
                   href="/how-it-works"
                   variant="outline"
                   size="lg"
-                  className="border-white/30 text-white hover:bg-white hover:text-navy"
+                  className="border-white/30 bg-transparent text-white hover:border-white hover:!bg-white hover:!text-navy"
                 >
                   How It Works
                 </Button>
               </div>
             </div>
 
-            <div className="order-1 flex flex-col items-center gap-6 lg:order-2 lg:gap-8">
-              <div className="relative w-full max-w-[220px] sm:max-w-[280px] lg:max-w-[320px]">
-                <div className="absolute -inset-3 rounded-3xl bg-orange/20 blur-2xl sm:-inset-4" />
-                <Image
-                  src="/logo.png"
-                  alt={`${company.name} logo`}
-                  width={320}
-                  height={320}
-                  className="relative mx-auto h-auto w-full rounded-2xl shadow-2xl"
-                  priority
-                />
-              </div>
-              <TrustBadges />
+            <div className="order-1 lg:order-2">
+              <HeroCreditDashboard />
             </div>
           </div>
         </Container>

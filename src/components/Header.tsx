@@ -4,12 +4,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
+import { LoginModal } from "@/components/auth/LoginModal";
 import { company, navLinks } from "@/lib/content";
+import { AuthButton } from "@/components/ui/AuthButton";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 
 export function Header() {
   const [open, setOpen] = useState(false);
+  const [loginOpen, setLoginOpen] = useState(false);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -35,16 +38,16 @@ export function Header() {
           <Image
             src="/logo.png"
             alt={`${company.name} - ${company.tagline}`}
-            width={44}
+            width={52}
             height={44}
-            className="h-9 w-9 shrink-0 rounded-lg object-contain sm:h-11 sm:w-11"
+            className="h-9 w-auto shrink-0 object-contain sm:h-11"
           />
-          <div className="min-w-0">
-            <span className="block truncate text-base font-bold tracking-tight sm:text-lg">
+          <div className="flex min-w-0 flex-col gap-0.5">
+            <span className="truncate text-lg font-bold leading-tight tracking-tight sm:text-xl">
               <span className="text-navy">MR.</span>
               <span className="text-orange">IQ</span>
             </span>
-            <p className="hidden truncate text-[10px] font-medium uppercase tracking-[0.2em] text-muted sm:block">
+            <p className="m-0 hidden truncate text-xs font-medium uppercase leading-tight tracking-[0.15em] text-muted sm:block">
               {company.tagline}
             </p>
           </div>
@@ -64,16 +67,21 @@ export function Header() {
 
         <div className="flex items-center gap-2">
           <div className="hidden items-center gap-2 sm:flex xl:gap-3">
-            <Button href="/contact" variant="ghost" size="sm" className="hidden sm:inline-flex">
+            <AuthButton
+              variant="ghost"
+              size="sm"
+              className="hidden sm:inline-flex"
+              onClick={() => setLoginOpen(true)}
+            >
               Login
-            </Button>
-            <Button href="/contact" size="sm" className="hidden sm:inline-flex">
+            </AuthButton>
+            <Button href="/onboarding" size="sm" className="hidden sm:inline-flex">
               Get Started
             </Button>
           </div>
 
           <Button
-            href="/contact"
+            href="/onboarding"
             size="sm"
             className="inline-flex sm:hidden"
           >
@@ -112,17 +120,19 @@ export function Header() {
             </Link>
           ))}
           <div className="mt-3 flex flex-col gap-2 border-t border-border pt-4">
-            <Button
-              href="/contact"
+            <AuthButton
               variant="outline"
               size="sm"
               className="w-full"
-              onClick={() => setOpen(false)}
+              onClick={() => {
+                setOpen(false);
+                setLoginOpen(true);
+              }}
             >
               Login
-            </Button>
+            </AuthButton>
             <Button
-              href="/contact"
+              href="/onboarding"
               size="sm"
               className="w-full"
               onClick={() => setOpen(false)}
@@ -132,6 +142,8 @@ export function Header() {
           </div>
         </nav>
       </div>
+
+      <LoginModal open={loginOpen} onClose={() => setLoginOpen(false)} />
     </header>
   );
 }

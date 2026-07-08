@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { LayoutDashboard, RefreshCw, UserCog, Users } from "lucide-react";
 import { ActionButton } from "@/components/ui/ActionButton";
 import { Card } from "@/components/ui/Card";
@@ -21,6 +22,7 @@ import type { Client, ClientDetail } from "@/lib/credit-repair/types";
 type ViewMode = "admin" | "client";
 
 export function CreditRepairDashboard() {
+  const searchParams = useSearchParams();
   const [viewMode, setViewMode] = useState<ViewMode>("admin");
   const [clients, setClients] = useState<Client[]>([]);
   const [selectedClient, setSelectedClient] = useState<ClientDetail | null>(null);
@@ -54,6 +56,14 @@ export function CreditRepairDashboard() {
   useEffect(() => {
     loadClients();
   }, [loadClients]);
+
+  useEffect(() => {
+    const clientId = searchParams.get("clientId");
+    if (!clientId) return;
+
+    setViewMode("client");
+    loadClientDetail(clientId);
+  }, [searchParams, loadClientDetail]);
 
   async function handleSelectClient(client: Client) {
     await loadClientDetail(client.id);

@@ -186,6 +186,27 @@ create index if not exists audit_logs_client_id_idx on audit_logs (client_id);
 create index if not exists audit_logs_entity_idx on audit_logs (entity_type, entity_id);
 create index if not exists audit_logs_created_at_idx on audit_logs (created_at desc);
 
+-- ─── IdentityIQ Enrollments ────────────────────────────────────────────────
+
+create table if not exists identityiq_enrollments (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  client_id uuid not null unique references clients (id) on delete cascade,
+  status text not null default 'pending' check (
+    status in ('pending', 'enrolled', 'active', 'sync_failed')
+  ),
+  member_reference text,
+  enrollment_url text,
+  enrolled_at timestamptz,
+  last_sync_at timestamptz,
+  last_summary jsonb,
+  metadata jsonb default '{}'::jsonb
+);
+
+create index if not exists identityiq_enrollments_client_id_idx
+  on identityiq_enrollments (client_id);
+
 -- ─── Updated-at trigger ────────────────────────────────────────────────────
 
 create or replace function set_updated_at()
@@ -204,6 +225,8 @@ create trigger negative_items_updated_at before update on negative_items
   for each row execute function set_updated_at();
 create trigger disputes_updated_at before update on disputes
   for each row execute function set_updated_at();
+create trigger identityiq_enrollments_updated_at before update on identityiq_enrollments
+  for each row execute function set_updated_at();
 
 -- ─── Storage bucket (run separately if using Storage UI) ─────────────────────
 -- insert into storage.buckets (id, name, public) values ('credit-documents', 'credit-documents', false);
@@ -218,6 +241,7 @@ alter table dispute_letters enable row level security;
 alter table client_documents enable row level security;
 alter table consent_forms enable row level security;
 alter table audit_logs enable row level security;
+alter table identityiq_enrollments enable row level security;
 
 create policy "Allow all for authenticated" on clients for all using (true) with check (true);
 create policy "Allow all for authenticated" on credit_reports for all using (true) with check (true);
@@ -227,3 +251,4 @@ create policy "Allow all for authenticated" on dispute_letters for all using (tr
 create policy "Allow all for authenticated" on client_documents for all using (true) with check (true);
 create policy "Allow all for authenticated" on consent_forms for all using (true) with check (true);
 create policy "Allow all for authenticated" on audit_logs for all using (true) with check (true);
+create policy "Allow all for authenticated" on identityiq_enrollments for all using (true) with check (true);

@@ -13,9 +13,9 @@ export function Footer() {
               <Image
                 src="/logo.png"
                 alt={company.name}
-                width={48}
+                width={56}
                 height={48}
-                className="h-12 w-12 shrink-0 rounded-lg object-contain sm:h-14 sm:w-14"
+                className="h-12 w-auto shrink-0 object-contain sm:h-14"
               />
               <div className="min-w-0">
                 <p className="text-lg font-bold sm:text-xl">
