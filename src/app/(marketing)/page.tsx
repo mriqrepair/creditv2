@@ -5,6 +5,7 @@ import {
   Users,
 } from "lucide-react";
 import { HeroCreditDashboard } from "@/components/marketing/HeroCreditDashboard";
+import { MobileHeroSection } from "@/components/marketing/MobileHeroSection";
 import { DifferentiatorCards } from "@/components/marketing/DifferentiatorCards";
 import { FounderStatsGrid } from "@/components/marketing/FounderStatsGrid";
 import { MemberBenefitsShowcase } from "@/components/marketing/MemberBenefitsShowcase";
@@ -33,6 +34,16 @@ export default async function HomePage() {
 
   return (
     <>
+      <MobileHeroSection
+        className="lg:hidden"
+        companyName={company.name}
+        companyTagline={company.tagline}
+        title={ui.home.mobileHeroTitle}
+        titleAccent={ui.home.mobileHeroTitleAccent}
+        description={ui.home.mobileHeroDescription}
+        ctaLabel={ui.common.getStarted}
+      />
+
       <section className="relative overflow-hidden bg-gradient-to-br from-navy-dark via-navy to-navy-light">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-orange/10 via-transparent to-transparent" />
         <Container className="relative py-12 sm:py-16 lg:py-24">
@@ -85,7 +96,7 @@ export default async function HomePage() {
         </Container>
       </section>
 
-      <Section className="bg-surface">
+      <Section className="hidden bg-surface lg:block">
         <Container>
           <SectionHeading
             eyebrow={ui.home.differenceEyebrow}
@@ -156,7 +167,7 @@ export default async function HomePage() {
         </Container>
       </Section>
 
-      <Section className="bg-navy text-white">
+      <Section className="hidden bg-navy text-white lg:block">
         <Container>
           <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-12">
             <div>
@@ -184,7 +195,7 @@ export default async function HomePage() {
         </Container>
       </Section>
 
-      <Section>
+      <Section className="hidden lg:block">
         <Container narrow className="text-center">
           <Users className="mx-auto h-10 w-10 text-orange sm:h-12 sm:w-12" />
           <h2 className="mt-3 text-2xl font-bold text-navy sm:mt-4 sm:text-3xl">

@@ -2,8 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Menu, X, Shield } from "lucide-react";
+import { Home, Menu, Shield, X } from "lucide-react";
 import { LoginModal } from "@/components/auth/LoginModal";
 import { useLanguage } from "@/components/providers/LanguageProvider";
 import { AuthButton } from "@/components/ui/AuthButton";
@@ -22,6 +23,8 @@ export function Header() {
   );
   const [open, setOpen] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
+  const pathname = usePathname();
+  const isHome = pathname === "/";
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -40,28 +43,32 @@ export function Header() {
     <>
       <header className="fixed inset-x-0 top-0 z-50 border-b border-border/60 bg-white/95 pt-[env(safe-area-inset-top,0px)] backdrop-blur-md supports-[backdrop-filter]:bg-white/90">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-2.5 sm:px-6 sm:py-3 lg:px-8">
-        <Link
-          href="/"
-          className="flex min-w-0 shrink items-center gap-2 sm:gap-3"
-          onClick={() => setOpen(false)}
-        >
-          <Image
-            src="/logo.png"
-            alt={`${company.name} - ${company.tagline}`}
-            width={52}
-            height={44}
-            className="h-9 w-auto shrink-0 object-contain sm:h-11"
-          />
-          <div className="flex min-w-0 flex-col gap-0.5">
-            <span className="truncate text-lg font-bold leading-tight tracking-tight sm:text-xl">
-              <span className="text-navy">MR.</span>
-              <span className="text-orange">IQ</span>
-            </span>
-            <p className="m-0 hidden truncate text-xs font-medium uppercase leading-tight tracking-[0.15em] text-muted sm:block">
-              {company.tagline}
-            </p>
-          </div>
-        </Link>
+        <div className="flex min-w-0 items-center gap-2 sm:gap-3">
+          <Link
+            href="/"
+            className="hidden min-w-0 shrink items-center gap-2 sm:gap-3 lg:flex"
+            onClick={() => setOpen(false)}
+          >
+            <Image
+              src="/logo.png"
+              alt={`${company.name} - ${company.tagline}`}
+              width={52}
+              height={44}
+              className="h-9 w-auto shrink-0 object-contain sm:h-11"
+            />
+            <div className="flex min-w-0 flex-col gap-0.5">
+              <span className="truncate text-lg font-bold leading-tight tracking-tight sm:text-xl">
+                <span className="text-navy">MR.</span>
+                <span className="text-orange">IQ</span>
+              </span>
+              <p className="m-0 hidden truncate text-xs font-medium uppercase leading-tight tracking-[0.15em] text-muted sm:block">
+                {company.tagline}
+              </p>
+            </div>
+          </Link>
+
+          <LanguageToggle compact className="inline-flex lg:hidden" />
+        </div>
 
         <nav className="hidden items-center gap-0.5 xl:flex">
           {desktopNavLinks.map((link) => (
@@ -75,8 +82,7 @@ export function Header() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-2">
-          <LanguageToggle compact className="hidden sm:inline-flex" />
+        <div className="ml-auto flex items-center gap-2 lg:ml-0">
 
           <div className="hidden items-center gap-2 sm:flex xl:gap-3">
             <AuthButton
@@ -121,9 +127,16 @@ export function Header() {
         )}
       >
         <nav className="flex flex-col gap-0.5 px-4 py-3 pb-6">
-          <div className="mb-2 flex justify-center sm:hidden">
-            <LanguageToggle />
-          </div>
+          {!isHome && (
+            <Link
+              href="/"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-2 rounded-lg px-3 py-3 text-sm font-medium text-foreground/80 active:bg-surface"
+            >
+              <Home className="h-4 w-4 text-orange" />
+              {ui.common.home}
+            </Link>
+          )}
           {navLinks.map((link) => (
             <Link
               key={link.href}

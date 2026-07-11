@@ -279,6 +279,7 @@ export const es: SiteContent = {
       closeMenu: "Cerrar menú",
       language: "Idioma",
       admin: "Admin",
+      home: "Inicio",
     },
     footer: {
       description:
@@ -317,6 +318,7 @@ export const es: SiteContent = {
     },
     pricing: {
       mostPopular: "Popular",
+      mostPopularShort: "Popular",
       whatsIncluded: "Qué incluye:",
       couplesLabel: "Parejas:",
       showMore: "Mostrar {count} características más",
@@ -388,6 +390,10 @@ export const es: SiteContent = {
     home: {
       heroTitle: "La Opción Inteligente para",
       heroTitleAccent: "Reparar su Crédito",
+      mobileHeroTitle: "Repare Su",
+      mobileHeroTitleAccent: "Crédito ¡HOY!",
+      mobileHeroDescription:
+        "Comience a reparar su crédito de inmediato. Elija uno de nuestros planes de suscripción hoy para empezar.",
       heroDescription:
         "La solución más poderosa para disputar problemas en sus informes de crédito y mejorar sus puntajes — respaldada por {years} años de experiencia.",
       differenceEyebrow: "Descubra la Diferencia MR. IQ",

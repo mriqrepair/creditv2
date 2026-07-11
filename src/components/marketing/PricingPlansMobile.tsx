@@ -23,31 +23,42 @@ export function PricingPlansMobile() {
   return (
     <div className="mt-8 md:hidden">
       <div className="flex gap-2 rounded-2xl border border-border bg-white p-1.5 shadow-sm">
-        {pricingPlans.map((item, index) => (
-          <button
-            key={item.name}
-            type="button"
-            onClick={() => {
-              setActiveIndex(index);
-              setExpanded(false);
-            }}
-            className={cn(
-              "flex flex-1 flex-col items-center justify-center gap-1 rounded-xl px-1.5 py-2 text-center transition-all",
-              index === activeIndex
-                ? "bg-navy text-white shadow-md"
-                : "text-muted hover:text-navy"
-            )}
-          >
-            {item.popular ? (
-              <span className="max-w-full truncate rounded-full bg-orange px-1.5 py-0.5 text-[7px] font-bold uppercase leading-none tracking-wide whitespace-nowrap text-white">
-                {ui.pricing.mostPopular}
-              </span>
-            ) : (
-              <span className="h-[14px]" aria-hidden />
-            )}
-            <span className="text-[11px] font-semibold leading-tight">{item.name}</span>
-          </button>
-        ))}
+        {pricingPlans.map((item, index) => {
+          const isActive = index === activeIndex;
+
+          return (
+            <button
+              key={item.name}
+              type="button"
+              onClick={() => {
+                setActiveIndex(index);
+                setExpanded(false);
+              }}
+              className={cn(
+                "flex min-h-[3.5rem] flex-1 flex-col items-center justify-center gap-1.5 rounded-xl px-2 py-2.5 text-center transition-all",
+                isActive
+                  ? "bg-navy text-white shadow-md"
+                  : "text-muted hover:bg-surface hover:text-navy"
+              )}
+            >
+              {item.popular ? (
+                <span
+                  className={cn(
+                    "rounded-full px-2 py-0.5 text-[9px] font-bold uppercase leading-none tracking-wide",
+                    isActive
+                      ? "bg-orange text-white"
+                      : "bg-orange/10 text-orange"
+                  )}
+                >
+                  {ui.pricing.mostPopularShort}
+                </span>
+              ) : (
+                <span className="h-[18px]" aria-hidden />
+              )}
+              <span className="text-xs font-semibold leading-tight">{item.name}</span>
+            </button>
+          );
+        })}
       </div>
 
       <div className="mt-4 overflow-hidden rounded-2xl border border-border bg-white shadow-md">

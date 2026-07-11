@@ -56,6 +56,7 @@ export type SiteContent = {
       closeMenu: string;
       language: string;
       admin: string;
+      home: string;
     };
     footer: {
       description: string;
@@ -93,6 +94,7 @@ export type SiteContent = {
     };
     pricing: {
       mostPopular: string;
+      mostPopularShort: string;
       whatsIncluded: string;
       couplesLabel: string;
       showMore: string;
@@ -154,6 +156,9 @@ export type SiteContent = {
     home: {
       heroTitle: string;
       heroTitleAccent: string;
+      mobileHeroTitle: string;
+      mobileHeroTitleAccent: string;
+      mobileHeroDescription: string;
       heroDescription: string;
       differenceEyebrow: string;
       differenceTitle: string;

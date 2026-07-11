@@ -279,6 +279,7 @@ export const en: SiteContent = {
       closeMenu: "Close menu",
       language: "Language",
       admin: "Admin",
+      home: "Home",
     },
     footer: {
       description:
@@ -317,6 +318,7 @@ export const en: SiteContent = {
     },
     pricing: {
       mostPopular: "Most Popular",
+      mostPopularShort: "Popular",
       whatsIncluded: "What's included:",
       couplesLabel: "Couples:",
       showMore: "Show {count} more features",
@@ -388,6 +390,10 @@ export const en: SiteContent = {
     home: {
       heroTitle: "The Smart Choice for",
       heroTitleAccent: "Fixing Credit",
+      mobileHeroTitle: "Fix Your",
+      mobileHeroTitleAccent: "Credit TODAY!",
+      mobileHeroDescription:
+        "Start fixing your credit immediately. Choose one of our subscription plans today to get started.",
       heroDescription:
         "The most powerful solution to dispute issues on your credit reports and improve your scores — backed by {years} years of expertise.",
       differenceEyebrow: "Discover the MR. IQ Difference",
